@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadith Narrator Comparison Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        :root {
+            --primary-color: #2e86de;
+            --secondary-color: #ff9f43;
+            --accent-color: #54a0ff;
+            --background-color: #f6f9fc;
+            --card-color: #ffffff;
+            --text-color: #2d3436;
+            --title-color: #0c2461;
+            --success-color: #26de81;
+            --error-color: #fc5c65;
+            --narrator-a-color: #686de0;
+            --narrator-b-color: #e17055;
+            --hadith-bg: #ebfbee;
+            --hadith-border: #a2e1af;
+        }
+        
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+        
+        .game-container {
+            background-color: var(--card-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        h1 {
+            color: var(--title-color);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 20%;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+        
+        .game-subtitle {
+            color: #636e72;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .hadith-container {
+            background-color: var(--hadith-bg);
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: left;
+            border-left: 5px solid var(--hadith-border);
+            position: relative;
+        }
+        
+        .hadith-container::before {
+            content: "\201C";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 80px;
+            color: rgba(0, 128, 0, 0.1);
+            font-family: 'Noto Serif', serif;
+        }
+        
+        .hadith-text {
+            font-family: 'Noto Serif', serif;
+            font-style: italic;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #2c3e50;
+            font-size: 1.05rem;
+        }
+        
+        .hadith-source {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            text-align: right;
+            font-weight: 500;
+        }
+        
+        .narrators {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .narrator {
+            border-radius: 15px;
+            padding: 25px 20px;
+            width: 42%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .narrator:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .narrator-a {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            border: 2px solid var(--narrator-a-color);
+        }
+        
+        .narrator-b {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border: 2px solid var(--narrator-b-color);
+        }
+        
+        .narrator h2 {
+            font-size: 1.8rem;
+            color: white;
+            margin: 0;
+            padding: 5px 15px;
+            border-radius: 50%;
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            line-height: 35px;
+        }
+        
+        .narrator-a h2 {
+            background-color: var(--narrator-a-color);
+        }
+        
+        .narrator-b h2 {
+            background-color: var(--narrator-b-color);
+        }
+        
+        .narrator h3 {
+            font-size: 1.3rem;
+            margin: 15px 0 5px;
+            color: var(--title-color);
+        }
+        
+        .vs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--secondary-color);
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .vs::before, .vs::after {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 3px;
+            background-color: rgba(255, 159, 67, 0.3);
+        }
+        
+        .vs::before {
+            left: -15px;
+        }
+        
+        .vs::after {
+            right: -15px;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        button {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            z-index: -1;
+        }
+        
+        button:hover::before {
+            width: 100%;
+        }
+        
+        button:active {
+            transform: translateY(2px);
+        }
+        
+        #chooseA {
+            background: linear-gradient(45deg, #4b6cb7, #182848);
+        }
+        
+        #chooseB {
+            background: linear-gradient(45deg, #ff9966, #ff5e62);
+        }
+        
+        .result {
+            margin: 25px 0;
+            font-weight: 600;
+            font-size: 1.2rem;
+            min-height: 30px;
+            color: var(--title-color);
+            transition: all 0.5s ease;
+        }
+        
+        .score-container {
+            background: linear-gradient(45deg, #5e60ce, #5390d9);
+            color: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        #score {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .restart {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            margin-top: 20px;
+            padding: 14px 32px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            opacity: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .narrators {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .narrator {
+                width: 80%;
+            }
+            
+            .vs {
+                margin: 10px 0;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .narrator {
+                width: 95%;
+                padding: 20px 15px;
+            }
+            
+            button {
+                width: 95%;
+                padding: 12px 20px;
+            }
+            
+            .game-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Hadith Narrator Quiz</h1>
+        <div class="game-subtitle">Test your knowledge of hadith narrators while learning from the Prophet's teachings</div>
+        
+        <div class="hadith-container">
+            <div class="hadith-text" id="hadith-text"></div>
+            <div class="hadith-source" id="hadith-source"></div>
+        </div>
+        
+        <div class="game-subtitle">Who has narrated more hadiths?</div>
+        
+        <div class="narrators">
+            <div class="narrator narrator-a">
+                <h2>A</h2>
+                <h3 id="narrator1"></h3>
+            </div>
+            <div class="vs">VS</div>
+            <div class="narrator narrator-b">
+                <h2>B</h2>
+                <h3 id="narrator2"></h3>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button id="chooseA">Choose A</button>
+            <button id="chooseB">Choose B</button>
+        </div>
+        
+        <div class="result" id="result"></div>
+        <div class="score-container">Score: <span id="score">0</span></div>
+        
+        <button id="restartGame" class="restart hidden">Play Again</button>
+    </div>
+
+    <script>
+        // Game data
+        const famousNarrators = [
+            {"name": "Abu Hurairah", "hadith_count": 5374},
+            {"name": "Abdullah ibn Umar", "hadith_count": 2630},
+            {"name": "Anas ibn Malik", "hadith_count": 2286},
+            {"name": "Aisha bint Abi Bakr", "hadith_count": 2210},
+            {"name": "Abdullah ibn Abbas", "hadith_count": 1660},
+            {"name": "Jabir ibn Abdullah", "hadith_count": 1540},
+            {"name": "Abu Sa'id al-Khudri", "hadith_count": 1170},
+            {"name": "Abdullah ibn Amr ibn al-As", "hadith_count": 700},
+            {"name": "Umm Salama", "hadith_count": 378},
+            {"name": "Ali ibn Abi Talib", "hadith_count": 536},
+            {"name": "Abu Bakr as-Siddiq", "hadith_count": 142},
+            {"name": "Umar ibn al-Khattab", "hadith_count": 537},
+            {"name": "Uthman ibn Affan", "hadith_count": 146},
+            {"name": "Bilal ibn Rabah", "hadith_count": 44},
+            {"name": "Muadh ibn Jabal", "hadith_count": 157},
+            {"name": "Abu Musa al-Ashari", "hadith_count": 360},
+            {"name": "Zayd ibn Thabit", "hadith_count": 92},
+            {"name": "Abu Dharr al-Ghifari", "hadith_count": 281},
+            {"name": "Sa'd ibn Abi Waqqas", "hadith_count": 121},
+            {"name": "Hudhayfah ibn al-Yaman", "hadith_count": 228},
+            {"name": "Salman al-Farsi", "hadith_count": 60},
+            {"name": "Ka'b ibn Ujrah", "hadith_count": 40},
+            {"name": "Umm Ayman", "hadith_count": 20},
+            {"name": "Fatimah bint Muhammad", "hadith_count": 18},
+            {"name": "Hassan ibn Thabit", "hadith_count": 12},
+            {"name": "Ibn Mas'ud", "hadith_count": 848},
+            {"name": "Imran ibn Husayn", "hadith_count": 650},
+            {"name": "Barra' ibn Azib", "hadith_count": 305},
+            {"name": "Abu Ayub al-Ansari", "hadith_count": 150}
+        ];
+
+        // Collection of Sahih Hadiths
+        const sahihHadiths = [
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Islam is built upon five: testifying that there is no god but Allah and that Muhammad is the Messenger of Allah, establishing the prayer, paying the Zakah, making the pilgrimage to the House, and fasting in Ramadan.'",
+                source: "Sahih Bukhari and Sahih Muslim",
+                narrator: "Ibn Umar"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'The actions are only by intentions, and each person will have only what they intended.'",
+                source: "Sahih Bukhari and Sahih Muslim",
+                narrator: "Umar ibn al-Khattab"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'None of you truly believes until he loves for his brother what he loves for himself.'",
+                source: "Sahih Bukhari and Sahih Muslim",
+                narrator: "Anas ibn Malik"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Whoever believes in Allah and the Last Day, let him speak good or remain silent. Whoever believes in Allah and the Last Day, let him be kind to his neighbor. Whoever believes in Allah and the Last Day, let him be generous to his guest.'",
+                source: "Sahih Bukhari and Sahih Muslim",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'The signs of a hypocrite are three: when he speaks he lies, when he promises he breaks it, and when he is entrusted he betrays the trust.'",
+                source: "Sahih Bukhari and Sahih Muslim",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'There should be neither harming nor reciprocating harm.'",
+                source: "Ibn Majah",
+                narrator: "Abu Sa'id al-Khudri"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Verily, Allah does not look at your appearance or wealth, but rather He looks at your hearts and your actions.'",
+                source: "Sahih Muslim",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'The strong person is not the one who overcomes people by his strength, but the strong person is the one who controls himself while in anger.'",
+                source: "Sahih Bukhari",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Part of someone's being a good Muslim is leaving alone that which does not concern him.'",
+                source: "Tirmidhi",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Whoever believes in Allah and the Last Day, let him maintain the bonds of kinship.'",
+                source: "Sahih Bukhari",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'The believer's shade on the Day of Resurrection will be his charity.'",
+                source: "Tirmidhi",
+                narrator: "Uqbah ibn Amir"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Make things easy and do not make them difficult, cheer people up and do not rebuke them.'",
+                source: "Sahih Bukhari",
+                narrator: "Anas ibn Malik"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Religion is ease, and whoever makes religion too hard on himself will be overpowered by it; so be moderate and steadfast.'",
+                source: "Sahih Bukhari",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Speak the truth even if it is bitter.'",
+                source: "Bayhaqi",
+                narrator: "Ibn Mas'ud"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Beware of suspicion, for suspicion is the most false of speech.'",
+                source: "Sahih Bukhari and Sahih Muslim",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'Whoever treads a path in search of knowledge, Allah will make easy for him the path to Paradise.'",
+                source: "Sahih Muslim",
+                narrator: "Abu Hurairah"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'The best of you are those who are best to their families, and I am the best of you to my family.'",
+                source: "Tirmidhi",
+                narrator: "Aisha bint Abi Bakr"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'A person's faith is not upright until his heart is upright, and his heart is not upright until his tongue is upright.'",
+                source: "Ahmad",
+                narrator: "Anas ibn Malik"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'The best of you are those who learn the Qur'an and teach it.'",
+                source: "Sahih Bukhari",
+                narrator: "Uthman ibn Affan"
+            },
+            {
+                text: "The Messenger of Allah (ﷺ) said: 'The supplication of a Muslim for his brother in his absence is readily accepted. An angel is appointed at his head who says: Amen, and may you receive the same.'",
+                source: "Sahih Muslim",
+                narrator: "Abu Darda"
+            }
+        ];
+
+        // Game state
+        let score = 0;
+        let gameActive = true;
+        let currentNarrator1;
+        let currentNarrator2;
+        let pulseInProgress = false;
+
+        // DOM elements
+        const narrator1Element = document.getElementById('narrator1');
+        const narrator2Element = document.getElementById('narrator2');
+        const chooseAButton = document.getElementById('chooseA');
+        const chooseBButton = document.getElementById('chooseB');
+        const resultElement = document.getElementById('result');
+        const scoreElement = document.getElementById('score');
+        const restartGameButton = document.getElementById('restartGame');
+        const hadithTextElement = document.getElementById('hadith-text');
+        const hadithSourceElement = document.getElementById('hadith-source');
+        const scoreContainer = document.querySelector('.score-container');
+
+        // Function to get a random narrator
+        function getRandomNarrator() {
+            return famousNarrators[Math.floor(Math.random() * famousNarrators.length)];
+        }
+
+        // Function to display a random hadith
+        function displayRandomHadith() {
+            const randomHadith = sahihHadiths[Math.floor(Math.random() * sahihHadiths.length)];
+            hadithTextElement.textContent = randomHadith.text;
+            hadithSourceElement.textContent = `Narrated by ${randomHadith.narrator} - ${randomHadith.source}`;
+        }
+
+        // Function to create confetti effect
+        function createConfetti() {
+            const container = document.querySelector('.game-container');
+            const colors = ['#ff6b6b', '#48dbfb', '#1dd1a1', '#feca57', '#54a0ff', '#5f27cd'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                const size = Math.random() * 10 + 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.backgroundColor = color;
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = `${Math.random() * 40 + 5}%`;
+                confetti.style.opacity = '0';
+                
+                container.appendChild(confetti);
+                
+                // Animate
+                setTimeout(() => {
+                    confetti.style.opacity = '1';
+                    confetti.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 + 50}px) rotate(${Math.random() * 360}deg)`;
+                    
+                    setTimeout(() => {
+                        confetti.style.opacity = '0';
+                        setTimeout(() => {
+                            if (confetti.parentNode) {
+                                container.removeChild(confetti);
+                            }
+                        }, 1000);
+                    }, 2000);
+                }, Math.random() * 500);
+            }
+        }
+
+        // Function to handle pulse animation
+        function pulseScore() {
+            if (pulseInProgress) return;
+            
+            pulseInProgress = true;
+            scoreContainer.classList.add('pulse');
+            
+            scoreContainer.addEventListener('animationend', function handler() {
+                scoreContainer.classList.remove('pulse');
+                scoreContainer.removeEventListener('animationend', handler);
+                pulseInProgress = false;
+            });
+        }
+
+        // Function to set up a new question
+        function setupQuestion() {
+            resultElement.textContent = '';
+            
+            // Get two different narrators
+            currentNarrator1 = getRandomNarrator();
+            currentNarrator2 = getRandomNarrator();
+            
+            while (currentNarrator1.name === currentNarrator2.name) {
+                currentNarrator2 = getRandomNarrator();
+            }
+            
+            // Display the narrators
+            narrator1Element.textContent = currentNarrator1.name;
+            narrator2Element.textContent = currentNarrator2.name;
+            
+            // Enable choice buttons
+            chooseAButton.disabled = false;
+            chooseBButton.disabled = false;
+
+            // Display a new random hadith for each question
+            displayRandomHadith();
+        }
+
+        // Function to check the answer
+        function checkAnswer(userChoice) {
+            const correctAnswer = currentNarrator1.hadith_count > currentNarrator2.hadith_count ? 'a' : 'b';
+            
+            if (userChoice === correctAnswer) {
+                score++;
+                scoreElement.textContent = score;
+                resultElement.textContent = '✅ Correct!';
+                resultElement.style.color = 'var(--success-color)';
+                
+                if (score % 5 === 0) {
+                    createConfetti();
+                }
+                
+                pulseScore();
+                
+                // Automatically move to next question after a brief delay
+                setTimeout(() => {
+                    if (gameActive) {
+                        setupQuestion();
+                    }
+                }, 1200);
+            } else {
+                resultElement.textContent = `❌ Incorrect! ${currentNarrator1.name} (${currentNarrator1.hadith_count}) vs ${currentNarrator2.name} (${currentNarrator2.hadith_count})`;
+                resultElement.style.color = 'var(--error-color)';
+                gameActive = false;
+                restartGameButton.classList.remove('hidden');
+            }
+            
+            chooseAButton.disabled = true;
+            chooseBButton.disabled = true;
+        }
+
+        // Event listeners
+        chooseAButton.addEventListener('click', function() {
+            checkAnswer('a');
+        });
+
+        chooseBButton.addEventListener('click', function() {
+            checkAnswer('b');
+        });
+
+        restartGameButton.addEventListener('click', function() {
+            score = 0;
+            gameActive = true;
+            scoreElement.textContent = score;
+            setupQuestion();
+            restartGameButton.classList.add('hidden');
+        });
+
+        // Add hover effect to narrators
+        const narratorElements = document.querySelectorAll('.narrator');
+        narratorElements.forEach(narrator => {
+            narrator.addEventListener('mouseover', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 12px 25px rgba(0, 0, 0, 0.12)';
+            });
+            
+            narrator.addEventListener('mouseout', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.07)';
+            });
+        });
+
+        // Initialize the game
+        displayRandomHadith();
+        setupQuestion();
+    </script>
+</body>
+</html>
